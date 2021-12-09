@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class TEST {   //边界尚未完善，即需要考虑最外层跟次外层的越界情况 
+public class TEST {   //双色轮换  不下重复  双3报错并不完善(有一个3被别人挡住的时候不算双3)
     //可优化为一个函数 加一个参数代表判定3或判定5 未完成
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -119,9 +119,6 @@ public class TEST {   //边界尚未完善，即需要考虑最外层跟次外�
             tempx += i*directx;
             tempy += i*directy;
             if (chess[tempx][tempy]!=chess[x][y]){
-                if(chess[tempx][tempy]!=0){
-                    countblack++;
-                }
                 break;
             }
             count++;
@@ -132,28 +129,72 @@ public class TEST {   //边界尚未完善，即需要考虑最外层跟次外�
             tempx -= i*directx;
             tempy -= i*directy;
             if (chess[tempx][tempy]!=chess[x][y]){
-                if(chess[tempx][tempy]!=0){
-                    countblack++;
-                }
                 break;
             }
             count++;
         }
-        return count >= 2 && countblack != 0;
+        return count >= 2;
     }
+    private static boolean checkthreestep2(int x, int y, int[][] chess, int directx, int directy){    //检查双3的重复
+        //direct表示搜索的方向 (1,0)表示搜索上下 (0,1)表示搜索左右 (1,1)表示搜索左上右下 (-1,1)表示搜索右上左下
 
+        int count = 0;
+        int countblack = 0;
+        for (int i=1;i<3;i++){
+            int tempx = x;
+            int tempy = y;
+            tempx += i*directx;
+            tempy += i*directy;
+            if(chess[tempx][tempy]!=chess[x][y]){
+                break;
+            }
+            if (chess[tempx][tempy]==chess[x][y]){
+                count++;
+            }
+            if(count==2){
+                int j = i+1;
+                int tempx1=x+j*directx;
+                int tempy1=y+j*directy;
+                if(chess[tempx1][tempy1]!=0&&chess[tempx1][tempy1]!=chess[x][y]){
+                    countblack++;
+                }
+            }
+        }
+
+        for (int i=1;i<3;i++){
+            int tempx = x;
+            int tempy = y;
+            tempx -= i*directx;
+            tempy -= i*directy;
+            if(chess[tempx][tempy]!=chess[x][y]){
+                break;
+            }
+            if (chess[tempx][tempy]==chess[x][y]){
+                count++;
+            }
+            if(count==2){
+                int j = i+1;
+                int tempx1=x-j*directx;
+                int tempy1=y-j*directy;
+                if(chess[tempx1][tempy1]!=0&&chess[tempx1][tempy1]!=chess[x][y]){
+                    countblack++;
+                }
+            }
+        }
+        return countblack == 0;
+    }
     private static boolean checkthreetot(int x, int y, int[][] chess){    //若有两个方向大于等于3子
         int tot = 0;
-        if (checkthreestep(x,y,chess,1,0)){
+        if (checkthreestep(x,y,chess,1,0)&&checkthreestep2(x,y,chess,1,0)){
             tot++;
         }
-        if (checkthreestep(x,y,chess,0,1)){
+        if (checkthreestep(x,y,chess,0,1)&&checkthreestep2(x,y,chess,0,1)){
             tot++;
         }
-        if (checkthreestep(x,y,chess,1,1)){
+        if (checkthreestep(x,y,chess,1,1)&&checkthreestep2(x,y,chess,1,1)){
             tot++;
         }
-        if (checkthreestep(x,y,chess,-1,1)){
+        if (checkthreestep(x,y,chess,-1,1)&&checkthreestep2(x,y,chess,-1,1)){
             tot++;
         }
         return tot >= 2;
