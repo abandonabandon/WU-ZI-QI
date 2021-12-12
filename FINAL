@@ -1,7 +1,7 @@
+import javax.swing.*;
 import java.util.Scanner;
 
-public class TEST {   //双色轮换  不下重复  双3报错并不完善(有一个3被别人挡住的时候不算双3)
-    //可优化为一个函数 加一个参数代表判定3或判定5 未完成
+public class TEST {
     public static void main(String[] args) {
         StdDraw.setScale(-1,15);
         StdDraw.setPenColor(StdDraw.PRINCETON_ORANGE);
@@ -14,25 +14,22 @@ public class TEST {   //双色轮换  不下重复  双3报错并不完善(有�
             StdDraw.line(14, i, 0, i);
         }
 
-
-        StdDraw.setPenColor(StdDraw.GREEN);//下面是鼠标点击绘制
-
         int[][] chess = new int[15][15];
         for (int i=0;i<chess.length;i++){
             for (int j=0;j<chess[0].length;j++){
                 chess[i][j]=0;   //初始化棋盘
             }
         }
-        for (int i=0;i<chess.length;i++){
-            for (int j=0;j<chess[0].length;j++){
-                System.out.print(chess[i][j]+" ");   //初始化棋盘
-            }
-            System.out.println();
-        }
+//        for (int i=0;i<chess.length;i++){
+//            for (int j=0;j<chess[0].length;j++){
+//                System.out.print(chess[i][j]+" ");   //初始化棋盘
+//            }
+//            System.out.println();
+//        }
 
         int flag=0;
         int color=1;    //用个String数组就可以表示黑/白 未完成
-        int counter = 0;
+        int counter=0;
         while (flag != 1){
                 if (StdDraw.isMousePressed()&&counter==0) {
                     counter++;
@@ -51,32 +48,33 @@ public class TEST {   //双色轮换  不下重复  双3报错并不完善(有�
                         }
 
                         chess[a][b] = color;
-                        StdDraw.filledCircle(a, b, 0.25);
+
                         if (checkthreetot(a, b, chess)) {   //判断双三且不影响获胜
                             chess[a][b] = 0;
                             System.out.println("wrong location, try again");
-                        }
-                        for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
-                            for (int j = 0; j < chess[0].length; j++) {
-                                System.out.print(chess[i][j] + " ");
+                        }else {
+                            StdDraw.filledCircle(a, b, 0.35);
+                            for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
+                                for (int j = 0; j < chess[0].length; j++) {
+                                    System.out.print(chess[i][j] + " ");
+                                }
+                                System.out.println();
                             }
-                            System.out.println();
-                        }
 
-                        if (color == 1) {   //换边
-                            color = 2;
-                        } else {
-                            color = 1;
-                        }
+                            if (color == 1) {   //换边
+                                color = 2;
+                            } else {
+                                color = 1;
+                            }
 
-                        System.out.println("it's " + color + "'s turn");
+                            System.out.println("it's " + color + "'s turn");
 
-                        if (checktot(a, b, chess)) {
-                            flag = 1;
-                            System.out.println("you win");
+                            if (checktot(a, b, chess)) {
+                                flag = 1;
+                                System.out.println("you win");
+                            }
                         }
                     }
-
                 }
                 if (!StdDraw.isMousePressed()) counter=0;
 
@@ -104,7 +102,10 @@ public class TEST {   //双色轮换  不下重复  双3报错并不完善(有�
             if (chess[tempx][tempy]!=chess[x][y]){
                 break;
             }
-            count++;
+            if(chess[tempx][tempy]==chess[x][y]){
+                count++;
+            }
+
         }
         for (int i=1;i<5;i++){
             int tempx = x;
@@ -117,7 +118,9 @@ public class TEST {   //双色轮换  不下重复  双3报错并不完善(有�
             if (chess[tempx][tempy]!=chess[x][y]){
                 break;
             }
-            count++;
+            if(chess[tempx][tempy]==chess[x][y]){
+                count++;
+            }
         }
         return count >= 4;
     }
@@ -135,7 +138,7 @@ public class TEST {   //双色轮换  不下重复  双3报错并不完善(有�
         if (checkstep(x,y,chess,-1,1)){
             return true;
         }
-        else return false;
+        return false;
     }
 
     private static boolean checkthreestep(int x, int y, int[][] chess, int directx, int directy){    //检查双3的重复
@@ -247,5 +250,4 @@ public class TEST {   //双色轮换  不下重复  双3报错并不完善(有�
         }
         return tot >= 2;
     }
-
 }
