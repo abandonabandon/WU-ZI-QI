@@ -1,0 +1,249 @@
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+
+class ChessModel {
+    public void main(int board) {
+        StdDraw.setScale(-1, board);
+        StdDraw.setPenColor(StdDraw.PRINCETON_ORANGE);
+        StdDraw.filledRectangle(8,8,10,10);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        for (double i = 0; i < board; i += 1) {
+            StdDraw.line(i, board-1, i, 0);
+            StdDraw.line(board-1, i, 0, i);
+        }
+
+        int[][] chess = new int[board][board];
+        for (int i = 0; i < chess.length; i++) {
+            for (int j = 0; j < chess[0].length; j++) {
+                chess[i][j] = 0;   //初始化棋盘
+            }
+        }
+
+
+        int flag = 0;
+        int color = 1;    //用个String数组就可以表示黑/白 未完成
+        int counter = 0;
+        while (flag != 1) {
+            if (StdDraw.isMousePressed() && counter == 0) {
+                counter++;
+                int a = (int) StdDraw.mouseX();
+                int b = (int) StdDraw.mouseY();
+
+                if (checkIfAgain(a, b, chess)) {    //判断当前位置有没有子
+                    System.out.println("wrong location, try again");
+                }
+                if (chess[a][b] == 0) {
+                    if (color == 1) {
+                        StdDraw.setPenColor(StdDraw.BLACK);
+                    }
+                    if (color == 2) {
+                        StdDraw.setPenColor(StdDraw.WHITE);
+                    }
+
+                    chess[a][b] = color;
+
+                    if (checkthreetot(a, b, chess)) {   //判断双三且不影响获胜
+                        chess[a][b] = 0;
+                        System.out.println("wrong location, try again");
+                    } else {
+                        StdDraw.filledCircle(a, b, 0.35);
+                        for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
+                            for (int j = 0; j < chess[0].length; j++) {
+                                System.out.print(chess[i][j] + " ");
+                            }
+                            System.out.println();
+                        }
+
+                        if (color == 1) {   //换边
+                            color = 2;
+                        } else {
+                            color = 1;
+                        }
+
+                        System.out.println("it's " + color + "'s turn");
+
+                        if (checktot(a, b, chess)) {
+                            flag = 1;
+                            System.out.println("you win");
+                        }
+                    }
+                }
+            }
+            if (!StdDraw.isMousePressed()) counter = 0;
+
+        }
+    }
+
+
+    //判断该坐标位置是否可下棋
+    public boolean checkIfAgain(int x, int y, int[][] chess) {   //判断当前位置有没有子
+        return chess[x][y] != 0;
+    }
+
+    public boolean checkstep(int x, int y, int[][] chess, int directx, int directy) {
+        //direct表示搜索的方向 (1,0)表示搜索上下 (0,1)表示搜索左右 (1,1)表示搜索左上右下 (-1,1)表示搜索右上左下
+
+        int count = 0;
+        for (int i = 1; i < 5; i++) {
+            int tempx = x;
+            int tempy = y;
+            tempx += i * directx;
+            tempy += i * directy;
+            if (tempx < 0 || tempx > chess.length-1 || tempy < 0 || tempy > chess.length-1) {
+                break;
+            }
+            if (chess[tempx][tempy] != chess[x][y]) {
+                break;
+            }
+            if (chess[tempx][tempy] == chess[x][y]) {
+                count++;
+            }
+
+        }
+        for (int i = 1; i < 5; i++) {
+            int tempx = x;
+            int tempy = y;
+            tempx -= i * directx;
+            tempy -= i * directy;
+            if (tempx < 0 || tempx > chess.length-1 || tempy < 0 || tempy > chess.length-1) {
+                break;
+            }
+            if (chess[tempx][tempy] != chess[x][y]) {
+                break;
+            }
+            if (chess[tempx][tempy] == chess[x][y]) {
+                count++;
+            }
+        }
+        return count >= 4;
+    }
+
+    public boolean checktot(int x, int y, int[][] chess) {
+        if (checkstep(x, y, chess, 1, 0)) {
+            return true;
+        }
+        if (checkstep(x, y, chess, 0, 1)) {
+            return true;
+        }
+        if (checkstep(x, y, chess, 1, 1)) {
+            return true;
+        }
+        if (checkstep(x, y, chess, -1, 1)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkthreestep(int x, int y, int[][] chess, int directx, int directy) {    //检查双3的重复
+        //direct表示搜索的方向 (1,0)表示搜索上下 (0,1)表示搜索左右 (1,1)表示搜索左上右下 (-1,1)表示搜索右上左下
+
+        int count = 0;
+        int countblack = 0;
+        for (int i = 1; i < 3; i++) {
+            int tempx = x;
+            int tempy = y;
+            tempx += i * directx;
+            tempy += i * directy;
+            if (tempx < 0 || tempx > chess.length-1 || tempy < 0 || tempy > chess.length-1) {
+                break;
+            }
+            if (chess[tempx][tempy] != chess[x][y]) {
+                break;
+            }
+            count++;
+        }
+        for (int i = 1; i < 3; i++) {
+            int tempx = x;
+            int tempy = y;
+            tempx -= i * directx;
+            tempy -= i * directy;
+            if (tempx < 0 || tempx > chess.length-1 || tempy < 0 || tempy > chess.length-1) {
+                break;
+            }
+            if (chess[tempx][tempy] != chess[x][y]) {
+                break;
+            }
+            count++;
+        }
+        return count >= 2;
+    }
+
+    private boolean checkthreestep2(int x, int y, int[][] chess, int directx, int directy) {    //检查双3的重复
+        //direct表示搜索的方向 (1,0)表示搜索上下 (0,1)表示搜索左右 (1,1)表示搜索左上右下 (-1,1)表示搜索右上左下
+
+        int count = 0;
+        int countblack = 0;
+        for (int i = 1; i < 3; i++) {
+            int tempx = x;
+            int tempy = y;
+            tempx += i * directx;
+            tempy += i * directy;
+            if (tempx < 0 || tempx > chess.length-1 || tempy < 0 || tempy > chess.length-1) {
+                break;
+            }
+            if (chess[tempx][tempy] != chess[x][y]) {
+                break;
+            }
+            if (chess[tempx][tempy] == chess[x][y]) {
+                count++;
+            }
+            if (count == 2) {
+                int j = i + 1;
+                int tempx1 = x + j * directx;
+                int tempy1 = y + j * directy;
+                if (tempx1 < 0 || tempx1 > chess.length-1 || tempy1 < 0 || tempy1 > chess.length-1) {
+                    break;
+                }
+                if (chess[tempx1][tempy1] != 0 && chess[tempx1][tempy1] != chess[x][y]) {
+                    countblack++;
+                }
+            }
+        }
+
+        for (int i = 1; i < 3; i++) {
+            int tempx = x;
+            int tempy = y;
+            tempx -= i * directx;
+            tempy -= i * directy;
+            if (tempx < 0 || tempx > chess.length-1 || tempy < 0 || tempy > chess.length-1) {
+                break;
+            }
+            if (chess[tempx][tempy] != chess[x][y]) {
+                break;
+            }
+            if (chess[tempx][tempy] == chess[x][y]) {
+                count++;
+            }
+            if (count == 2) {
+                int j = i + 1;
+                int tempx1 = x - j * directx;
+                int tempy1 = y - j * directy;
+                if (tempx1 < 0 || tempx1 > chess.length-1 || tempy1 < 0 || tempy1 > chess.length-1) {
+                    break;
+                }
+                if (chess[tempx1][tempy1] != 0 && chess[tempx1][tempy1] != chess[x][y]) {
+                    countblack++;
+                }
+            }
+        }
+        return countblack == 0;
+    }
+
+    private boolean checkthreetot(int x, int y, int[][] chess) {    //若有两个方向大于等于3子
+        int tot = 0;
+        if (checkthreestep(x, y, chess, 1, 0) && checkthreestep2(x, y, chess, 1, 0)) {
+            tot++;
+        }
+        if (checkthreestep(x, y, chess, 0, 1) && checkthreestep2(x, y, chess, 0, 1)) {
+            tot++;
+        }
+        if (checkthreestep(x, y, chess, 1, 1) && checkthreestep2(x, y, chess, 1, 1)) {
+            tot++;
+        }
+        if (checkthreestep(x, y, chess, -1, 1) && checkthreestep2(x, y, chess, -1, 1)) {
+            tot++;
+        }
+        return tot >= 2;
+    }
+}
