@@ -2,35 +2,62 @@ import java.awt.*;
 
 public class FINAL {
     public static void main(String[] args) {
-        StdDraw.setScale(0, 6);
-        StdDraw.setPenColor(Color.RED);
-        StdDraw.filledRectangle(1, 1, 1, 1);
+        StdDraw.setScale(-6,0);
         StdDraw.setPenColor(Color.YELLOW);
-        StdDraw.filledRectangle(3, 3, 1, 1);
-        StdDraw.setPenColor(StdDraw.BLUE);
-        StdDraw.filledRectangle(5, 5, 1, 1);
+        StdDraw.filledRectangle(-3,-4.5,3,1.5);
+        StdDraw.setPenColor(Color.GREEN);
+        StdDraw.filledRectangle(-3,-1.5,3,1.5);
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.text(1, 1, "15X15");
-        StdDraw.text(3, 3, "17X17");
-        StdDraw.text(5, 5, "19X19");
+        StdDraw.line(-6,-3,0,-3);
+        StdDraw.line(-4,-6,-4,0);
+        StdDraw.line(-2,-6,-2,0);
+        StdDraw.text(-5,-4,"PVP");
+        StdDraw.text(-3,-4,"PVP");
+        StdDraw.text(-1,-4,"PVP");
+        StdDraw.text(-5,-1,"PVE");
+        StdDraw.text(-3,-1,"PVE");
+        StdDraw.text(-1,-1,"PVE");
+        StdDraw.text(-5,-5,"15x15");
+        StdDraw.text(-3,-5,"17x17");
+        StdDraw.text(-1,-5,"19x19");
+        StdDraw.text(-5,-2,"15x15");
+        StdDraw.text(-3,-2,"17x17");
+        StdDraw.text(-1,-2,"19x19");
         ChessModel a = new ChessModel();
-        while (true) {
-            if (StdDraw.mouseX() > 0 && StdDraw.mouseX() < 2 && StdDraw.mouseY() > 0 && StdDraw.mouseY() < 2&&StdDraw.isMousePressed()) {
+        while (true){
+            if(StdDraw.mouseX()>-6&&StdDraw.mouseX()<-4 && StdDraw.mouseY() > -6 && StdDraw.mouseY() < -3&&StdDraw.isMousePressed()){
                 StdDraw.clear();
                 a.main(15);
                 break;
             }
-            if (StdDraw.mouseX() > 2 && StdDraw.mouseX() < 4 && StdDraw.mouseY() > 2 && StdDraw.mouseY() < 4&&StdDraw.isMousePressed()) {
+            if(StdDraw.mouseX()>-4&&StdDraw.mouseX()<-2 && StdDraw.mouseY() > -6 && StdDraw.mouseY() < -3&&StdDraw.isMousePressed()){
                 StdDraw.clear();
                 a.main(17);
                 break;
             }
-            if (StdDraw.mouseX() > 4 && StdDraw.mouseX() < 6 && StdDraw.mouseY() > 4 && StdDraw.mouseY() < 6&&StdDraw.isMousePressed()) {
+            if(StdDraw.mouseX()>-2&&StdDraw.mouseX()<0 && StdDraw.mouseY() > -6 && StdDraw.mouseY() < -3&&StdDraw.isMousePressed()){
                 StdDraw.clear();
                 a.main(19);
                 break;
             }
+            if(StdDraw.mouseX()>-6&&StdDraw.mouseX()<-4 && StdDraw.mouseY() > -3 && StdDraw.mouseY() < 0&&StdDraw.isMousePressed()){
+                StdDraw.clear();
+                a.main1(15);
+                break;
+            }
+            if(StdDraw.mouseX()>-4&&StdDraw.mouseX()<-2 && StdDraw.mouseY() > -3 && StdDraw.mouseY() < 0 && StdDraw.isMousePressed()){
+                StdDraw.clear();
+                a.main1(17);
+                break;
+            }
+            if(StdDraw.mouseX()>-2&&StdDraw.mouseX()<0 && StdDraw.mouseY() > -3 && StdDraw.mouseY() < 0 &&StdDraw.isMousePressed()){
+                StdDraw.clear();
+                a.main1(19);
+                break;
+            }
         }
+
+
 
 
     }
