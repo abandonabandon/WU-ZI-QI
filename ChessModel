@@ -1,16 +1,16 @@
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import java.awt.*;
 
 
 class ChessModel {
     public void main(int board) {
-        StdDraw.setScale(-1, board);
+        StdDraw.clear();
+        StdDraw.setScale(-1.5, board+1.5);
         StdDraw.setPenColor(StdDraw.PRINCETON_ORANGE);
-        StdDraw.filledRectangle(8,8,10,10);
+        StdDraw.filledRectangle(8,8,20,20);
         StdDraw.setPenColor(StdDraw.BLACK);
         for (double i = 0; i < board; i += 1) {
-            StdDraw.line(i, board-1, i, 0);
-            StdDraw.line(board-1, i, 0, i);
+            StdDraw.line(i+0.5, board-0.5, i+0.5, 0.5);
+            StdDraw.line(board-0.5, i+0.5, 0.5, i+0.5);
         }
 
         int[][] chess = new int[board][board];
@@ -20,20 +20,24 @@ class ChessModel {
             }
         }
 
-
         int flag = 0;
-        int color = 1;    //用个String数组就可以表示黑/白 未完成
+        int color = 1;
         int counter = 0;
         while (flag != 1) {
             if (StdDraw.isMousePressed() && counter == 0) {
                 counter++;
+                StdDraw.setPenColor(StdDraw.PRINCETON_ORANGE);
+                StdDraw.filledRectangle(8,-1.1,15,0.5);
                 int a = (int) StdDraw.mouseX();
                 int b = (int) StdDraw.mouseY();
-
-                if (checkIfAgain(a, b, chess)) {    //判断当前位置有没有子
-                    System.out.println("wrong location, try again");
+                if(a>=0&&a<=board&&b>=0&&b<=board){
+                    if (checkIfAgain(a, b, chess)) {
+                        StdDraw.setPenColor(StdDraw.BLACK);
+                        StdDraw.text(0.5*board,-1,"wrong location, try again");
+                    }
                 }
-                if (chess[a][b] == 0) {
+
+                if (a>=0&&a<=board&&b>=0&&b<=board&&chess[a][b] == 0) {
                     if (color == 1) {
                         StdDraw.setPenColor(StdDraw.BLACK);
                     }
@@ -43,17 +47,18 @@ class ChessModel {
 
                     chess[a][b] = color;
 
-                    if (checkthreetot(a, b, chess)) {   //判断双三且不影响获胜
+                    if (checkthreetot(a, b, chess)&&chess[a][b]==1) {   //判断双三且不影响获胜
                         chess[a][b] = 0;
-                        System.out.println("wrong location, try again");
+                        StdDraw.setPenColor(StdDraw.BLACK);
+                        StdDraw.text(board/2,-1,"wrong location, try again");
                     } else {
-                        StdDraw.filledCircle(a, b, 0.35);
-                        for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
-                            for (int j = 0; j < chess[0].length; j++) {
-                                System.out.print(chess[i][j] + " ");
-                            }
-                            System.out.println();
-                        }
+                        StdDraw.filledCircle(a+0.5, b+0.5, 0.35);
+//                        for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
+//                            for (int j = 0; j < chess[0].length; j++) {
+//                                System.out.print(chess[i][j] + " ");
+//                            }
+//                            System.out.println();
+//                        }
 
                         if (color == 1) {   //换边
                             color = 2;
@@ -64,7 +69,18 @@ class ChessModel {
                         System.out.println("it's " + color + "'s turn");
 
                         if (checktot(a, b, chess)) {
+                            StdDraw.setPenColor(Color.BLACK);
                             flag = 1;
+                            if(chess[a][b]==1){
+                                StdDraw.clear();
+                                StdDraw.setScale(0,1);
+                                StdDraw.text(0.5,0.5,"Black win");
+                            }
+                            if(chess[a][b]==2){
+                                StdDraw.clear();
+                                StdDraw.setScale(0,1);
+                                StdDraw.text(0.5,0.5,"White win");
+                            }
                             System.out.println("you win");
                         }
                     }
@@ -72,6 +88,173 @@ class ChessModel {
             }
             if (!StdDraw.isMousePressed()) counter = 0;
 
+        }
+    }
+
+    public void main1(int board){
+        StdDraw.setScale(-1.5,board+1.5);
+        StdDraw.setPenColor(StdDraw.PRINCETON_ORANGE);
+        StdDraw.filledRectangle(8,8,20,20);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        for (double i = 0; i < board; i += 1) {
+            StdDraw.line(i+0.5, board-0.5, i+0.5, 0.5);
+            StdDraw.line(board-0.5, i+0.5, 0.5, i+0.5);
+        }
+
+        int[][] chess = new int[board][board];
+        for (int i=0;i<chess.length;i++){
+            for (int j=0;j<chess[0].length;j++){
+                chess[i][j]=0;   //初始化棋盘
+            }
+        }
+
+        int flag=0;
+        int color = 1;  //用个String数组就可以表示黑/白 未完成
+        int counter=0;
+        int stop=0;
+
+        while (flag != 1){
+            if (color==1){   //玩家选择黑棋
+                if (StdDraw.isMousePressed()&&counter==0) {   //鼠标点击时
+                    counter++;
+                    StdDraw.setPenColor(StdDraw.PRINCETON_ORANGE);
+                    StdDraw.filledRectangle(8,-1.1,15,0.5);
+                    int a = (int) StdDraw.mouseX();
+                    int b = (int) StdDraw.mouseY();
+                    StdDraw.setPenColor(StdDraw.BLACK);
+                    if(a>=0&&a<=board&&b>=0&&b<=board){
+                        if (checkIfAgain(a, b, chess)) {
+                            StdDraw.setPenColor(StdDraw.BLACK);
+                            StdDraw.text(board/2,-1,"wrong location, try again");
+                        }
+                    }
+                    if(a>=0&&a<=board&&b>=0&&b<=board&&chess[a][b]==0){    //这里没有棋子，能下
+                        chess[a][b]=1;
+
+                        if (checkthreetot(a, b, chess)) {   //判断双三且不影响获胜
+                            chess[a][b] = 0;
+                            StdDraw.setPenColor(StdDraw.BLACK);
+                            StdDraw.text(board/2,-1,"wrong location, try again");
+                        }
+                        else {
+                            StdDraw.filledCircle(a+0.5, b+0.5, 0.35);    //stdDraw的在这里打印
+//                            for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
+//                                for (int j = 0; j < chess[0].length; j++) {
+//                                    System.out.print(chess[i][j] + " ");
+//                                }
+//                                System.out.println();
+//                            }
+//                            System.out.println();
+
+
+                            if (checktot(a, b, chess)) {
+                                flag = 1;
+                                if(chess[a][b]==1){
+                                    StdDraw.clear();
+                                    StdDraw.setScale(0,1);
+                                    StdDraw.text(0.5,0.5,"Black win");
+                                }
+                                if(chess[a][b]==2){
+                                    StdDraw.clear();
+                                    StdDraw.setScale(0,1);
+                                    StdDraw.text(0.5,0.5,"White win");
+                                }
+                            }
+                            else {   //轮到电脑
+                                for (int i=0;i<400;i++){
+                                    int tempa = (int) (Math.random() * 15);
+                                    int tempb = (int) (Math.random() * 15);
+                                    if (chess[tempa][tempb]==0){
+                                        chess[tempa][tempb]=2;   //java中
+
+                                        StdDraw.setPenColor(StdDraw.WHITE);   //stdDraw中
+                                        StdDraw.filledCircle(tempa+0.5, tempb+0.5, 0.35);    //stdDraw的在这里打印
+//                                        for (int j = 0; j < chess.length; j++) {   //打印当前棋盘
+//                                            for (int k = 0; k < chess[0].length; k++) {
+//                                                System.out.print(chess[j][k] + " ");
+//                                            }
+//                                            System.out.println();
+//                                        }
+//                                        System.out.println();
+                                        break;
+                                    }
+                                    if (checktot(a, b, chess)) {
+                                        flag = 1;
+                                        if(chess[a][b]==1){
+                                            StdDraw.clear();
+                                            StdDraw.setScale(0,1);
+                                            StdDraw.text(0.5,0.5,"Black win");
+                                        }
+                                        if(chess[a][b]==2){
+                                            StdDraw.clear();
+                                            StdDraw.setScale(0,1);
+                                            StdDraw.text(0.5,0.5,"White win");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!StdDraw.isMousePressed()) counter=0;
+            }
+
+//            if (color==2){   //玩家选择白棋
+//
+//                if (stop==0){
+//                    for (int i=0;i<400;i++){
+//                        int tempa = (int) (Math.random() * 15);
+//                        int tempb = (int) (Math.random() * 15);
+//                        if (chess[tempa][tempb]==0){
+//                            chess[tempa][tempb]=1;   //java中
+//                            stop=1;   //
+//
+//                            StdDraw.setPenColor(StdDraw.BLACK);   //stdDraw中
+//                            StdDraw.filledCircle(tempa+0.5, tempb+0.5, 0.35);    //stdDraw的在这里打印
+//                            for (int j = 0; j < chess.length; j++) {   //打印当前棋盘
+//                                for (int k = 0; k < chess[0].length; k++) {
+//                                    System.out.print(chess[j][k] + " ");
+//                                }
+//                                System.out.println();
+//                            }
+//                            System.out.println();
+//                            break;
+//                        }
+//                    }
+//                }
+//
+//
+//                else{
+//                    if (StdDraw.isMousePressed()&&counter==0) {   //鼠标点击时
+//                        StdDraw.setPenColor(StdDraw.WHITE);
+//                        counter++;
+//                        int a = (int) StdDraw.mouseX();
+//                        int b = (int) StdDraw.mouseY();
+//
+//                        if (checkIfAgain(a, b, chess)) {    //判断当前位置有没有子
+//                            System.out.println("Please choose another place to settle");
+//                        }
+//                        if(chess[a][b]==0){    //这里没有棋子，能下
+//                            chess[a][b]=2;   //java中
+//                            stop=0;   //
+//
+//                            StdDraw.filledCircle(a+0.5, b+0.5, 0.35);    //stdDraw的在这里打印
+//                            for (int i = 0; i < chess.length; i++) {   //打印当前棋盘
+//                                for (int j = 0; j < chess[0].length; j++) {
+//                                    System.out.print(chess[i][j] + " ");
+//                                }
+//                                System.out.println();
+//                            }
+//                            System.out.println();
+//                            if (checktot(a, b, chess)) {
+//                                flag = 1;
+//                                System.out.println(color+", you win");
+//                            }
+//                        }
+//                    }
+//                }
+//                if (!StdDraw.isMousePressed()) counter=0;
+//            }
         }
     }
 
@@ -198,6 +381,12 @@ class ChessModel {
                 if (chess[tempx1][tempy1] != 0 && chess[tempx1][tempy1] != chess[x][y]) {
                     countblack++;
                 }
+                if((x-directx)<0||(x-directx)>chess.length-1||(y-directy)<0||(y-directy)>chess.length-1){
+                    break;
+                }
+                if(chess[x-directx][y-directy] != 0 && chess[x-directx][y-directy] != chess[x][y]){
+                    countblack++;
+                }
             }
         }
 
@@ -223,6 +412,13 @@ class ChessModel {
                     break;
                 }
                 if (chess[tempx1][tempy1] != 0 && chess[tempx1][tempy1] != chess[x][y]) {
+                    countblack++;
+                }
+
+                if((x+directx)<0||(x+directx)>chess.length-1||(y+directy)<0||(y+directy)>chess.length-1){
+                    break;
+                }
+                if(chess[x+directx][y+directy] != 0 && chess[x+directx][y+directy] != chess[x][y]){
                     countblack++;
                 }
             }
