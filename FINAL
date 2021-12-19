@@ -1,94 +1,117 @@
 import java.awt.*;
 
-
 class FINAL {
     public static void main(String[] args) {
-        int board = 0;
-        int PP = 0;
-        int COLOR = 0;
-        StdDraw.setScale(-5,-3);
-        StdDraw.setPenColor(Color.YELLOW);
-        StdDraw.filledRectangle(-4, -3.5, 1, 0.5);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledRectangle(-4, -4.5, 1, 0.5);
-        StdDraw.setPenColor(Color.BLACK);
-        StdDraw.line(-5,-4,-3,-4);
-        StdDraw.text(-4,-3.5,"PVP");
-        StdDraw.text(-4,-4.5,"PVE");
-        while(true){
-            if(StdDraw.mouseY()<-3&&StdDraw.mouseY()>-4&&StdDraw.isMousePressed()){
-                PP=1;
-                break;
-            }
-            if(StdDraw.mouseY()<-4&&StdDraw.mouseY()>-5&&StdDraw.isMousePressed()){
-                PP=2;
-                break;
-            }
-        }
-
-        StdDraw.clear();
-        StdDraw.setScale(-7,-5);
-        StdDraw.setPenColor(Color.YELLOW);
-        StdDraw.filledRectangle(-6, -5.5, 1, 0.5);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledRectangle(-6, -6.5, 1, 0.5);
-        StdDraw.setPenColor(Color.BLACK);
-        StdDraw.line(-7,-6,-5,-6);
-        StdDraw.text(-6,-5.5,"You Choose Black");
-        StdDraw.text(-6,-6.5,"You Choose White");
-        if(PP==2){
-            while(true){
-                if(StdDraw.mouseY()<-5&&StdDraw.mouseY()>-6&&StdDraw.isMousePressed()){
-                    COLOR=1;
-                    break;
-                }
-                if(StdDraw.mouseY()<-6&&StdDraw.mouseY()>-7&&StdDraw.isMousePressed()){
-                    COLOR=2;
-                    break;
-                }
-            }
-        }
-
-        StdDraw.clear();
-        StdDraw.setScale(-3, 0);
-        StdDraw.setPenColor(Color.RED);
-        StdDraw.filledRectangle(-1.5, -0.5, 1.5, 0.5);
-        StdDraw.setPenColor(Color.YELLOW);
-        StdDraw.filledRectangle(-1.5, -1.5, 1.5, 0.5);
-        StdDraw.setPenColor(StdDraw.GREEN);
-        StdDraw.filledRectangle(-1.5, -2.5, 1.5, 0.5);
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.line(0,-1,-3,-1);
-        StdDraw.line(0,-2,-3,-2);
-        StdDraw.text(-1.5, -0.5, "15X15");
-        StdDraw.text(-1.5, -1.5, "17X17");
-        StdDraw.text(-1.5, -2.5, "19X19");
         while (true) {
-            if (StdDraw.mouseY() < 0 && StdDraw.mouseY() > -1 && StdDraw.isMousePressed()) {
-                board = 15;
-                break;
-            }
-            if (StdDraw.mouseY() < -1 && StdDraw.mouseY() > -2 && StdDraw.isMousePressed()) {
-                board = 17;
-                break;
-            }
-            if (StdDraw.mouseY() < -2 && StdDraw.mouseY() > -3 && StdDraw.isMousePressed()) {
-                board = 19;
-                break;
-            }
+            G();
         }
+    }
 
+    private static void G() {
+        int board;
+        int PP;
+        int COLOR = 0;
 
-        ChessModel a = new ChessModel();
-        if(PP==1){
-            a.main(board);
-        }
-        if(PP==2){
-            if(COLOR==1){
-                a.main1(board);
-            }
-            if(COLOR==2){
-                a.main2(board);
+        while (true) {
+            StdDraw.setScale(21, 25);
+            StdDraw.setPenColor(Color.BLACK);
+            StdDraw.line(21, 22, 25, 22);
+            StdDraw.line(21, 23, 25, 23);
+            StdDraw.text(23, 21.5, "Quit");
+            StdDraw.text(23, 22.5, "Start");
+            StdDraw.text(23, 24, "Gomoke");
+            while (true) {
+                if (StdDraw.mouseY() < 22 && StdDraw.mouseY() > 21 && StdDraw.isMousePressed()) {
+                    System.exit(0);
+                }
+                if (StdDraw.mouseY() < 23 && StdDraw.mouseY() > 22 && StdDraw.isMousePressed()) {
+                    StdDraw.clear();
+                    StdDraw.setScale(-5, -3);
+                    StdDraw.setPenColor(Color.YELLOW);
+                    StdDraw.filledRectangle(-4, -3.5, 1, 0.5);
+                    StdDraw.setPenColor(StdDraw.GREEN);
+                    StdDraw.filledRectangle(-4, -4.5, 1, 0.5);
+                    StdDraw.setPenColor(Color.BLACK);
+                    StdDraw.line(-5, -4, -3, -4);
+                    StdDraw.text(-4, -3.5, "PVP");
+                    StdDraw.text(-4, -4.5, "PVE");
+                    while (true) {
+                        if (StdDraw.mouseY() < -3 && StdDraw.mouseY() > -4 && StdDraw.isMousePressed()) {
+                            PP = 1;
+                            break;
+                        }
+                        if (StdDraw.mouseY() < -4 && StdDraw.mouseY() > -5 && StdDraw.isMousePressed()) {
+                            PP = 2;
+                            break;
+                        }
+                    }
+
+                    StdDraw.clear();
+                    StdDraw.setScale(-7, -5);
+                    StdDraw.setPenColor(Color.YELLOW);
+                    StdDraw.filledRectangle(-6, -5.5, 1, 0.5);
+                    StdDraw.setPenColor(StdDraw.GREEN);
+                    StdDraw.filledRectangle(-6, -6.5, 1, 0.5);
+                    StdDraw.setPenColor(Color.BLACK);
+                    StdDraw.line(-7, -6, -5, -6);
+                    StdDraw.text(-6, -5.5, "You Choose Black");
+                    StdDraw.text(-6, -6.5, "You Choose White");
+                    if (PP == 2) {
+                        while (true) {
+                            if (StdDraw.mouseY() < -5 && StdDraw.mouseY() > -6 && StdDraw.isMousePressed()) {
+                                COLOR = 1;
+                                break;
+                            }
+                            if (StdDraw.mouseY() < -6 && StdDraw.mouseY() > -7 && StdDraw.isMousePressed()) {
+                                COLOR = 2;
+                                break;
+                            }
+                        }
+                    }
+
+                    StdDraw.clear();
+                    StdDraw.setScale(-3, 0);
+                    StdDraw.setPenColor(Color.RED);
+                    StdDraw.filledRectangle(-1.5, -0.5, 1.5, 0.5);
+                    StdDraw.setPenColor(Color.YELLOW);
+                    StdDraw.filledRectangle(-1.5, -1.5, 1.5, 0.5);
+                    StdDraw.setPenColor(StdDraw.GREEN);
+                    StdDraw.filledRectangle(-1.5, -2.5, 1.5, 0.5);
+                    StdDraw.setPenColor(StdDraw.BLACK);
+                    StdDraw.line(0, -1, -3, -1);
+                    StdDraw.line(0, -2, -3, -2);
+                    StdDraw.text(-1.5, -0.5, "15X15");
+                    StdDraw.text(-1.5, -1.5, "17X17");
+                    StdDraw.text(-1.5, -2.5, "19X19");
+                    while (true) {
+                        if (StdDraw.mouseY() < 0 && StdDraw.mouseY() > -1 && StdDraw.isMousePressed()) {
+                            board = 15;
+                            break;
+                        }
+                        if (StdDraw.mouseY() < -1 && StdDraw.mouseY() > -2 && StdDraw.isMousePressed()) {
+                            board = 17;
+                            break;
+                        }
+                        if (StdDraw.mouseY() < -2 && StdDraw.mouseY() > -3 && StdDraw.isMousePressed()) {
+                            board = 19;
+                            break;
+                        }
+                    }
+                    ChessModel a = new ChessModel();
+                    if (PP == 1) {
+                        a.main(board);
+                    }
+                    if (PP == 2) {
+                        if (COLOR == 1) {
+                            a.main1(board);
+                        }
+                        if (COLOR == 2) {
+                            a.main2(board);
+                        }
+                    }
+                    break;
+                }
+
             }
         }
     }
